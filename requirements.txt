@@ -1,0 +1,6 @@
+anthropic>=0.34
+web3>=6.11
+requests>=2.31
+pydantic>=2.5
+click>=8.1
+rich>=13.7
