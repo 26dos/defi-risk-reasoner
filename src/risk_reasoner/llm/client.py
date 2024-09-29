@@ -28,3 +28,11 @@ class LLMClient:
         if tools is not None:
             kwargs["tools"] = tools
         return self.client.messages.create(**kwargs)
+
+
+
+def quick_ask(prompt: str, system: str = "You are a helpful assistant.") -> str:
+    """One-shot helper for ad-hoc queries during development."""
+    client = LLMClient()
+    msg = client.message(system=system, messages=[{"role": "user", "content": prompt}])
+    return "".join(b.text for b in msg.content if b.type == "text")
