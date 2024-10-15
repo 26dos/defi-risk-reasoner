@@ -17,14 +17,15 @@ class LLMClient:
                 cache_system: bool = True, cache_tools: bool = True):
         """Call the messages API with optional prompt caching.
 
-        We cache the system prompt and tool definitions because they are
-        large (especially tools) and they don't change across an agent run.
-        That alone usually pays for itself within ~3 turns.
+        Caches the system prompt and tool definitions across the run.
         """
-        # mark the system prompt as cacheable
         if cache_system and isinstance(system, str):
-            system = [{"type": "text", "text": system,
-                       "cache_control": {"type": "ephemeral"}}]
+            # API accepts list of typed blocks; mark the only block cacheable
+            system = [{
+                "type": "text",
+                "text": system,
+                "cache_control": {"type": "ephemeral"},
+            }]
         kwargs = {
             "model": self.model,
             "max_tokens": max_tokens,
@@ -33,8 +34,8 @@ class LLMClient:
         }
         if tools is not None:
             if cache_tools and tools:
-                tools = list(tools)
-                tools[-1] = {**tools[-1], "cache_control": {"type": "ephemeral"}}
+                tools = [{**t} for t in tools]
+                tools[-1]["cache_control"] = {"type": "ephemeral"}
             kwargs["tools"] = tools
         return self.client.messages.create(**kwargs)
 
