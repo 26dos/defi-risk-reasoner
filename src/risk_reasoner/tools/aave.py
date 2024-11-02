@@ -1,37 +1,20 @@
-"""Fetch an Aave V3 position summary for a wallet.
-
-Aave V3 exposes a UiPoolDataProvider contract that returns all the data we
-need in one call. We also normalize amounts into human-readable units.
-"""
+"""Fetch an Aave V3 position summary for a wallet."""
 from web3 import Web3
 
 
-# Aave V3 mainnet
 POOL = "0x87870Bca3F3fD6335C3F4ce8392D69350B4fa4E2"
-UI_DATA_PROVIDER = "0x91c0eA31b49B69Ea18607702c5d9aC360bf3dE7d"
 
-USER_RESERVES_ABI = [
+POOL_ABI = [
     {
-        "inputs": [
-            {"name": "provider", "type": "address"},
-            {"name": "user", "type": "address"},
-        ],
-        "name": "getUserReservesData",
+        "inputs": [{"name": "user", "type": "address"}],
+        "name": "getUserAccountData",
         "outputs": [
-            {
-                "components": [
-                    {"name": "underlyingAsset", "type": "address"},
-                    {"name": "scaledATokenBalance", "type": "uint256"},
-                    {"name": "usageAsCollateralEnabledOnUser", "type": "bool"},
-                    {"name": "stableBorrowRate", "type": "uint256"},
-                    {"name": "scaledVariableDebt", "type": "uint256"},
-                    {"name": "principalStableDebt", "type": "uint256"},
-                    {"name": "stableBorrowLastUpdateTimestamp", "type": "uint256"},
-                ],
-                "name": "userReserves",
-                "type": "tuple[]",
-            },
-            {"name": "userEMode", "type": "uint8"},
+            {"name": "totalCollateralBase", "type": "uint256"},
+            {"name": "totalDebtBase", "type": "uint256"},
+            {"name": "availableBorrowsBase", "type": "uint256"},
+            {"name": "currentLiquidationThreshold", "type": "uint256"},
+            {"name": "ltv", "type": "uint256"},
+            {"name": "healthFactor", "type": "uint256"},
         ],
         "stateMutability": "view",
         "type": "function",
@@ -39,23 +22,22 @@ USER_RESERVES_ABI = [
 ]
 
 
-def fetch_aave_v3_position(rpc_url: str, addresses_provider: str, user: str):
+def fetch_aave_v3_summary(rpc_url: str, user: str):
+    """Return liquidation-relevant aggregate state for a user.
+
+    All amounts in Aave 'base units' (USD with 8 decimals on mainnet).
+    healthFactor is in 1e18 units; >= 1e18 means safe.
+    """
     w3 = Web3(Web3.HTTPProvider(rpc_url))
-    c = w3.eth.contract(address=Web3.to_checksum_address(UI_DATA_PROVIDER), abi=USER_RESERVES_ABI)
-    reserves, e_mode = c.functions.getUserReservesData(
-        Web3.to_checksum_address(addresses_provider),
-        Web3.to_checksum_address(user),
-    ).call()
+    c = w3.eth.contract(address=Web3.to_checksum_address(POOL), abi=POOL_ABI)
+    r = c.functions.getUserAccountData(Web3.to_checksum_address(user)).call()
+    total_collateral, total_debt, available_borrows, liq_threshold, ltv, hf = r
     return {
         "user": user,
-        "e_mode": int(e_mode),
-        "reserves": [
-            {
-                "asset": r[0],
-                "atoken_scaled": int(r[1]),
-                "as_collateral": bool(r[2]),
-                "variable_debt_scaled": int(r[4]),
-            }
-            for r in reserves
-        ],
+        "total_collateral_usd": total_collateral / 1e8,
+        "total_debt_usd": total_debt / 1e8,
+        "available_borrows_usd": available_borrows / 1e8,
+        "current_ltv_bps": int(ltv),
+        "liquidation_threshold_bps": int(liq_threshold),
+        "health_factor": hf / 1e18 if hf < (2**127) else float("inf"),
     }
