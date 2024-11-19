@@ -1,0 +1,46 @@
+"""Inspect price feeds backing a position.
+
+We support Chainlink as the canonical reference. Custom oracles (e.g.,
+single-source TWAPs) are flagged separately because they're a known
+exploitation vector.
+"""
+import time
+
+from web3 import Web3
+
+
+CHAINLINK_AGGREGATOR_ABI = [
+    {"inputs": [], "name": "decimals", "outputs": [{"type": "uint8"}], "type": "function"},
+    {"inputs": [], "name": "description", "outputs": [{"type": "string"}], "type": "function"},
+    {"inputs": [], "name": "latestRoundData",
+     "outputs": [
+         {"name": "roundId", "type": "uint80"},
+         {"name": "answer", "type": "int256"},
+         {"name": "startedAt", "type": "uint256"},
+         {"name": "updatedAt", "type": "uint256"},
+         {"name": "answeredInRound", "type": "uint80"},
+     ],
+     "type": "function"},
+]
+
+
+def fetch_chainlink_feed(rpc_url: str, aggregator: str):
+    """Return latest answer + staleness."""
+    w3 = Web3(Web3.HTTPProvider(rpc_url))
+    c = w3.eth.contract(address=Web3.to_checksum_address(aggregator),
+                        abi=CHAINLINK_AGGREGATOR_ABI)
+    decimals = c.functions.decimals().call()
+    desc = c.functions.description().call()
+    rid, answer, started, updated, ans_round = c.functions.latestRoundData().call()
+    now = int(time.time())
+    return {
+        "aggregator": aggregator,
+        "description": desc,
+        "decimals": int(decimals),
+        "answer": int(answer),
+        "answer_human": int(answer) / (10 ** int(decimals)),
+        "updated_at": int(updated),
+        "staleness_seconds": now - int(updated),
+        "round_id": int(rid),
+        "answered_in_round": int(ans_round),
+    }
