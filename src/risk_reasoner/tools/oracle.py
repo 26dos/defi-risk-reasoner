@@ -44,3 +44,19 @@ def fetch_chainlink_feed(rpc_url: str, aggregator: str):
         "round_id": int(rid),
         "answered_in_round": int(ans_round),
     }
+
+
+
+def feed_drift(feed_a: dict, feed_b: dict) -> dict:
+    """Compare two feeds priced in the same denomination.
+
+    Useful when one protocol uses one feed and another uses a different feed
+    for the same asset — drift between them is an arbitrage / liquidation
+    surface.
+    """
+    a = feed_a["answer_human"]
+    b = feed_b["answer_human"]
+    if a == 0 or b == 0:
+        return {"drift_bps": None, "diff_abs": abs(a - b)}
+    bps = abs(a - b) / max(a, b) * 10_000
+    return {"drift_bps": bps, "feed_a": a, "feed_b": b}
