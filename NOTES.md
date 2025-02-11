@@ -12,3 +12,7 @@ verified: cache hit ratio is ~70% on a 5-iteration agent run. saves real money.
 ## eoy 2024
 
 basic agent is working end to end. eval set up next.
+
+## stress scenarios
+
+the -50% eth move + +5% stablecoin pair is the one i actually care about most.
