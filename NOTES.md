@@ -16,3 +16,7 @@ basic agent is working end to end. eval set up next.
 ## stress scenarios
 
 the -50% eth move + +5% stablecoin pair is the one i actually care about most.
+
+## tool result
+
+we stringify tool outputs. this is fine but model sometimes infers types wrong from string. consider structured outputs later.
