@@ -30,3 +30,26 @@ def tool_call_log(run_result: dict) -> list[dict]:
                 log.append({"tool": tname,
                             "input": getattr(b, "input", {}) or b.get("input", {})})
     return log
+
+
+
+def render_terminal(run_result: dict) -> None:
+    """Pretty-print a report to the terminal."""
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.markdown import Markdown
+    from rich.table import Table
+
+    console = Console()
+    console.print(Panel.fit("DeFi Risk Reasoner — report", style="bold cyan"))
+    console.print(Markdown(extract_final_text(run_result)))
+
+    log = tool_call_log(run_result)
+    if log:
+        t = Table(title="Tool calls", show_lines=False)
+        t.add_column("#")
+        t.add_column("Tool")
+        t.add_column("Input")
+        for i, c in enumerate(log, 1):
+            t.add_row(str(i), c["tool"], str(c["input"])[:100])
+        console.print(t)
