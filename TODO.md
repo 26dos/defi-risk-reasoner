@@ -5,3 +5,4 @@
 - [ ] tally + boardroom + agora besides snapshot
 - [ ] dollar cost estimate per agent run
 - [ ] add screenshots of example transcripts to docs/
+- [ ] commit anonymized example transcripts to docs/transcripts/
