@@ -11,3 +11,4 @@
 - [ ] check if proposal modifies risk parameters specifically
 - [ ] wire morpho into the registry (not just standalone)
 - [ ] tail scenarios: -90% on long-tail collateral
+- [ ] support gnosis safe addresses (multi-sig wallets)
