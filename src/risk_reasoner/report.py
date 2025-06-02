@@ -2,15 +2,19 @@
 from typing import Any
 
 
+def _block_attr(b, name, default=None):
+    if isinstance(b, dict):
+        return b.get(name, default)
+    return getattr(b, name, default)
+
+
 def extract_final_text(run_result: dict) -> str:
-    """The last assistant message is the rendered report."""
     for m in reversed(run_result["messages"]):
         if m["role"] != "assistant":
             continue
-        # content is a list of typed blocks
         parts = []
         for b in m["content"]:
-            text = getattr(b, "text", None) if not isinstance(b, dict) else b.get("text")
+            text = _block_attr(b, "text")
             if text:
                 parts.append(text)
         if parts:
@@ -19,22 +23,21 @@ def extract_final_text(run_result: dict) -> str:
 
 
 def tool_call_log(run_result: dict) -> list[dict]:
-    """Return a flat log of tool calls made during the run."""
     log = []
     for m in run_result["messages"]:
         if m["role"] != "assistant":
             continue
         for b in m["content"]:
-            tname = getattr(b, "name", None) if not isinstance(b, dict) else b.get("name")
-            if tname and getattr(b, "type", None) == "tool_use":
-                log.append({"tool": tname,
-                            "input": getattr(b, "input", {}) or b.get("input", {})})
+            if _block_attr(b, "type") != "tool_use":
+                continue
+            log.append({
+                "tool": _block_attr(b, "name"),
+                "input": _block_attr(b, "input") or {},
+            })
     return log
 
 
-
 def render_terminal(run_result: dict) -> None:
-    """Pretty-print a report to the terminal."""
     from rich.console import Console
     from rich.panel import Panel
     from rich.markdown import Markdown
