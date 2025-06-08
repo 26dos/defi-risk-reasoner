@@ -40,3 +40,7 @@ plan: stay on 4.5 until 4.6 quality is verified on the full eval set.
 ## tools
 
 current toolset is aave + chainlink + snapshot + morpho. should add: spark, gearbox, fluid.
+
+## costs
+
+typical run: 8k input / 1.5k output, ~$0.04 with caching, ~$0.12 without.
