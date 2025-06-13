@@ -24,3 +24,7 @@ we stringify tool outputs. this is fine but model sometimes infers types wrong f
 ## paper
 
 working title. won't submit anywhere serious until eval set is bigger (target n=200).
+
+## ci
+
+DON'T put real ANTHROPIC_API_KEY in actions. dummy key works for unit tests; integration tests run locally only.
