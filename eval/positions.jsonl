@@ -1,0 +1,3 @@
+{"wallet": "0x73af3bcf944a6559933396c1577b257e2054d935", "liquidation_concern": true, "oracle_concern": false, "notes": "leveraged stETH/ETH, low HF in late 2024"}
+{"wallet": "0xae2d4617c862309a3d75a0ffb358c7a5009c673f", "liquidation_concern": false, "oracle_concern": false, "notes": "supply only, no debt"}
+{"wallet": "0x07ad07eb89bd6e15ddb9d05f59cd2b9ad4d3eea0", "liquidation_concern": true, "oracle_concern": true, "notes": "borrowed against a long-tail collateral"}
