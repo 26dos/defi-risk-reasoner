@@ -16,7 +16,8 @@ ERC20_ABI = [
 
 
 @lru_cache(maxsize=512)
-def token_metadata(rpc_url: str, token: str):
+def _metadata_cache_key(rpc_url: str, token: str):
+    # actual fetch performed by token_metadata; lru_cache by (rpc_url, token)
     w3 = Web3(Web3.HTTPProvider(rpc_url))
     c = w3.eth.contract(address=Web3.to_checksum_address(token), abi=ERC20_ABI)
     try:
@@ -28,6 +29,10 @@ def token_metadata(rpc_url: str, token: str):
     except Exception:
         symbol = "?"
     return {"decimals": decimals, "symbol": symbol}
+
+
+def token_metadata(rpc_url: str, token: str):
+    return _metadata_cache_key(rpc_url, token.lower())
 
 
 def balance_of(rpc_url: str, token: str, holder: str) -> int:
