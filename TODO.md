@@ -7,3 +7,4 @@
 - [ ] add screenshots of example transcripts to docs/
 - [ ] commit anonymized example transcripts to docs/transcripts/
 - [ ] morpho blue on arbitrum (different deployment address)
+- [ ] add tracing hook to agent loop for debugging
