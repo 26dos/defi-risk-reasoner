@@ -1,9 +1,4 @@
-"""A minimal tool-using agent loop on top of the Anthropic API.
-
-The agent runs until the model returns an `end_turn` stop reason or until
-`max_iterations` is reached. Each tool_use block is dispatched to the
-registered tool handler and the result is passed back as a tool_result.
-"""
+"""A minimal tool-using agent loop on top of the Anthropic API."""
 from typing import Any, Callable
 
 from .client import LLMClient
@@ -25,20 +20,25 @@ class Agent:
 
     def run(self, user_message: str) -> dict:
         messages = [{"role": "user", "content": user_message}]
+        usage_total = {"input_tokens": 0, "output_tokens": 0,
+                       "cache_creation_input_tokens": 0,
+                       "cache_read_input_tokens": 0}
         for step in range(self.max_iterations):
             response = self.client.message(
                 system=self.system,
                 messages=messages,
                 tools=self.tools,
             )
+            for k in usage_total:
+                usage_total[k] += getattr(response.usage, k, 0) or 0
             messages.append({"role": "assistant", "content": response.content})
 
             if response.stop_reason == "end_turn":
-                return {"messages": messages, "steps": step + 1}
+                return {"messages": messages, "steps": step + 1, "usage": usage_total}
 
             tool_uses = [b for b in response.content if b.type == "tool_use"]
             if not tool_uses:
-                return {"messages": messages, "steps": step + 1}
+                return {"messages": messages, "steps": step + 1, "usage": usage_total}
 
             results = []
             for tu in tool_uses:
@@ -60,4 +60,5 @@ class Agent:
                         "is_error": True,
                     })
             messages.append({"role": "user", "content": results})
-        return {"messages": messages, "steps": self.max_iterations, "exhausted": True}
+        return {"messages": messages, "steps": self.max_iterations,
+                "exhausted": True, "usage": usage_total}
