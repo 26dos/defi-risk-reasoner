@@ -28,3 +28,7 @@ working title. won't submit anywhere serious until eval set is bigger (target n=
 ## ci
 
 DON'T put real ANTHROPIC_API_KEY in actions. dummy key works for unit tests; integration tests run locally only.
+
+## usage
+
+added per-run token totals. cache_read_input_tokens is the line to watch.
