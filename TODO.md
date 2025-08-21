@@ -13,3 +13,4 @@
 - [ ] tail scenarios: -90% on long-tail collateral
 - [ ] support gnosis safe addresses (multi-sig wallets)
 - [ ] tail event scenario presets (Luna-style depeg, oracle exploit)
+- [ ] tiny streamlit demo for the paper
