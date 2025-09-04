@@ -8,3 +8,4 @@
 - [ ] commit anonymized example transcripts to docs/transcripts/
 - [ ] morpho blue on arbitrum (different deployment address)
 - [ ] add tracing hook to agent loop for debugging
+- [ ] check if proposal modifies risk parameters specifically
