@@ -48,3 +48,7 @@ typical run: 8k input / 1.5k output, ~$0.04 with caching, ~$0.12 without.
 ## scenarios
 
 current set covers 80% of historical liquidation events; missing: long-tail collateral with no chainlink feed.
+
+## models
+
+planning to default to 4.6 once we re-run the eval set.
