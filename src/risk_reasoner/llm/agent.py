@@ -8,6 +8,10 @@ class ToolError(Exception):
     pass
 
 
+def _is_terminal(stop_reason):
+    return stop_reason in ("end_turn", "stop_sequence", "max_tokens")
+
+
 class Agent:
     def __init__(self, client: LLMClient, system: str, tools: list[dict],
                  handlers: dict[str, Callable[[dict], Any]],
@@ -33,12 +37,14 @@ class Agent:
                 usage_total[k] += getattr(response.usage, k, 0) or 0
             messages.append({"role": "assistant", "content": response.content})
 
-            if response.stop_reason == "end_turn":
-                return {"messages": messages, "steps": step + 1, "usage": usage_total}
+            if _is_terminal(response.stop_reason):
+                return {"messages": messages, "steps": step + 1, "usage": usage_total,
+                        "stop_reason": response.stop_reason}
 
             tool_uses = [b for b in response.content if b.type == "tool_use"]
             if not tool_uses:
-                return {"messages": messages, "steps": step + 1, "usage": usage_total}
+                return {"messages": messages, "steps": step + 1, "usage": usage_total,
+                        "stop_reason": response.stop_reason}
 
             results = []
             for tu in tool_uses:
@@ -61,4 +67,5 @@ class Agent:
                     })
             messages.append({"role": "user", "content": results})
         return {"messages": messages, "steps": self.max_iterations,
-                "exhausted": True, "usage": usage_total}
+                "exhausted": True, "usage": usage_total,
+                "stop_reason": "max_iterations"}
