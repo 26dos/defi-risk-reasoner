@@ -32,3 +32,7 @@ DON'T put real ANTHROPIC_API_KEY in actions. dummy key works for unit tests; int
 ## usage
 
 added per-run token totals. cache_read_input_tokens is the line to watch.
+
+## model bumps
+
+plan: stay on 4.5 until 4.6 quality is verified on the full eval set.
