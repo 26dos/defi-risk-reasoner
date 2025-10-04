@@ -14,3 +14,4 @@
 - [ ] support gnosis safe addresses (multi-sig wallets)
 - [ ] tail event scenario presets (Luna-style depeg, oracle exploit)
 - [ ] tiny streamlit demo for the paper
+- [ ] --trace flag on cli to print every tool call
