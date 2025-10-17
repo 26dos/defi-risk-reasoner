@@ -52,3 +52,7 @@ current set covers 80% of historical liquidation events; missing: long-tail coll
 ## models
 
 planning to default to 4.6 once we re-run the eval set.
+
+## token usage
+
+cached system + tools account for ~85% of context; that's where caching pays.
