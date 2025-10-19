@@ -15,3 +15,4 @@ runs/
 out/
 *.swp
 out/transcripts/
+.vscode/settings.local.json
