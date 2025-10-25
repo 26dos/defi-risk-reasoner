@@ -12,6 +12,13 @@ def _is_terminal(stop_reason):
     return stop_reason in ("end_turn", "stop_sequence", "max_tokens")
 
 
+def _add_usage(total, response):
+    if response.usage is None:
+        return
+    for k in total:
+        total[k] += getattr(response.usage, k, 0) or 0
+
+
 class Agent:
     def __init__(self, client: LLMClient, system: str, tools: list[dict],
                  handlers: dict[str, Callable[[dict], Any]],
@@ -33,8 +40,7 @@ class Agent:
                 messages=messages,
                 tools=self.tools,
             )
-            for k in usage_total:
-                usage_total[k] += getattr(response.usage, k, 0) or 0
+            _add_usage(usage_total, response)
             messages.append({"role": "assistant", "content": response.content})
 
             if _is_terminal(response.stop_reason):
