@@ -4,3 +4,4 @@
 - 0.3.1 (2025-06-22): bug fixes in oracle_audit
 - 0.3.2 (2025-08-08): rich rendering tweaks
 - 0.3.3 (2025-09-19): typo + dep bumps
+- 0.3.4 (2025-10-29): docs/PREPRINT touch-ups
