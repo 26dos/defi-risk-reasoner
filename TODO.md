@@ -9,3 +9,4 @@
 - [ ] morpho blue on arbitrum (different deployment address)
 - [ ] add tracing hook to agent loop for debugging
 - [ ] check if proposal modifies risk parameters specifically
+- [ ] wire morpho into the registry (not just standalone)
