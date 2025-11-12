@@ -15,3 +15,4 @@
 - [ ] tail event scenario presets (Luna-style depeg, oracle exploit)
 - [ ] tiny streamlit demo for the paper
 - [ ] --trace flag on cli to print every tool call
+- [ ] integration test for morpho tool with anvil fork
