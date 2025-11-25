@@ -36,3 +36,7 @@ added per-run token totals. cache_read_input_tokens is the line to watch.
 ## model bumps
 
 plan: stay on 4.5 until 4.6 quality is verified on the full eval set.
+
+## tools
+
+current toolset is aave + chainlink + snapshot + morpho. should add: spark, gearbox, fluid.
