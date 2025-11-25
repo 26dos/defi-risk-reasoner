@@ -56,3 +56,7 @@ planning to default to 4.6 once we re-run the eval set.
 ## token usage
 
 cached system + tools account for ~85% of context; that's where caching pays.
+
+## governance
+
+added heuristic for proposals shorter than 24h; flags emergency votes.
