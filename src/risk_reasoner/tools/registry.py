@@ -69,3 +69,36 @@ def build_handlers(rpc_url: str):
             inp["space_id"], inp.get("limit", 10),
         ),
     }
+
+
+
+# ----- Morpho Blue (added later) -----
+
+from . import morpho  # noqa: E402
+
+TOOL_DEFINITIONS.append({
+    "name": "fetch_morpho_position",
+    "description": "Read a user's position in a single Morpho Blue market.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "market_id": {"type": "string", "description": "32-byte market id, 0x-prefixed"},
+            "user": {"type": "string"},
+        },
+        "required": ["market_id", "user"],
+    },
+})
+
+
+def _add_morpho_handler(handlers, rpc_url):
+    handlers["fetch_morpho_position"] = lambda inp: morpho.fetch_morpho_position(
+        rpc_url, inp["market_id"], inp["user"],
+    )
+    return handlers
+
+
+_orig_build = build_handlers
+
+
+def build_handlers(rpc_url: str):  # noqa: F811
+    return _add_morpho_handler(_orig_build(rpc_url), rpc_url)
