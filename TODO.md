@@ -10,3 +10,4 @@
 - [ ] add tracing hook to agent loop for debugging
 - [ ] check if proposal modifies risk parameters specifically
 - [ ] wire morpho into the registry (not just standalone)
+- [ ] tail scenarios: -90% on long-tail collateral
