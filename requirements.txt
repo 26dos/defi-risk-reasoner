@@ -1,4 +1,4 @@
-anthropic>=0.34
+anthropic>=0.40
 web3>=6.11
 requests>=2.31
 pydantic>=2.5
