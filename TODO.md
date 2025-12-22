@@ -16,3 +16,4 @@
 - [ ] tiny streamlit demo for the paper
 - [ ] --trace flag on cli to print every tool call
 - [ ] integration test for morpho tool with anvil fork
+- [ ] notebook walking through cost-per-run breakdown
