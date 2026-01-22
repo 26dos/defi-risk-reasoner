@@ -6,3 +6,4 @@
 - 0.3.3 (2025-09-19): typo + dep bumps
 - 0.3.4 (2025-10-29): docs/PREPRINT touch-ups
 - 0.3.5 (2025-12-09): morpho integration finalized
+- 0.4.0 (2026-01-22): morpho support + agent loop hardening
