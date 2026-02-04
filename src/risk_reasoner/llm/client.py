@@ -1,11 +1,11 @@
 """Wrapper around the Anthropic SDK."""
 import os
-from typing import Any
 
 from anthropic import Anthropic
 
 
-DEFAULT_MODEL = "claude-sonnet-4-5"
+# Switched to 4.6 for the slightly better tool-use behavior in long traces.
+DEFAULT_MODEL = "claude-sonnet-4-6"
 
 
 class LLMClient:
@@ -15,12 +15,7 @@ class LLMClient:
 
     def message(self, system, messages, tools=None, max_tokens=4096,
                 cache_system: bool = True, cache_tools: bool = True):
-        """Call the messages API with optional prompt caching.
-
-        Caches the system prompt and tool definitions across the run.
-        """
         if cache_system and isinstance(system, str):
-            # API accepts list of typed blocks; mark the only block cacheable
             system = [{
                 "type": "text",
                 "text": system,
