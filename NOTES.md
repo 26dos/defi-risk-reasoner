@@ -64,3 +64,7 @@ added heuristic for proposals shorter than 24h; flags emergency votes.
 ## eval (jan 2026)
 
 sonnet 4.6: liquidation F1 0.95 (was 0.93). small but real.
+
+## report
+
+added usage summary at the bottom; useful for comparing runs.
