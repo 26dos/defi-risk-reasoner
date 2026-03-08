@@ -37,6 +37,19 @@ def tool_call_log(run_result: dict) -> list[dict]:
     return log
 
 
+def usage_summary(run_result: dict) -> dict:
+    u = run_result.get("usage") or {}
+    cached = u.get("cache_read_input_tokens", 0) or 0
+    fresh = u.get("input_tokens", 0) or 0
+    out = u.get("output_tokens", 0) or 0
+    return {
+        "input_tokens": fresh,
+        "output_tokens": out,
+        "cache_read_tokens": cached,
+        "cache_hit_ratio": (cached / max(1, fresh + cached)),
+    }
+
+
 def render_terminal(run_result: dict) -> None:
     from rich.console import Console
     from rich.panel import Panel
@@ -56,3 +69,9 @@ def render_terminal(run_result: dict) -> None:
         for i, c in enumerate(log, 1):
             t.add_row(str(i), c["tool"], str(c["input"])[:100])
         console.print(t)
+
+    u = usage_summary(run_result)
+    console.print(
+        f"\n[dim]tokens: {u['input_tokens']} in / {u['output_tokens']} out, "
+        f"cache hit: {u['cache_hit_ratio']*100:.0f}%[/dim]"
+    )
