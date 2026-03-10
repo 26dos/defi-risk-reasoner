@@ -7,3 +7,4 @@
 - 0.3.4 (2025-10-29): docs/PREPRINT touch-ups
 - 0.3.5 (2025-12-09): morpho integration finalized
 - 0.4.0 (2026-01-22): morpho support + agent loop hardening
+- 0.4.1 (2026-03-10): polish + usage_summary helper
