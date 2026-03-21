@@ -18,3 +18,4 @@
 - [ ] integration test for morpho tool with anvil fork
 - [ ] notebook walking through cost-per-run breakdown
 - [ ] spark and fluid lending markets
+- [ ] cli: analyze --multi for batches of wallets
