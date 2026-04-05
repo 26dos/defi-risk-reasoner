@@ -68,3 +68,7 @@ sonnet 4.6: liquidation F1 0.95 (was 0.93). small but real.
 ## report
 
 added usage summary at the bottom; useful for comparing runs.
+
+## haiku
+
+tried haiku 4.5 — much cheaper but tool-use is shakier on edge cases. stay with sonnet for now.
