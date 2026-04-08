@@ -49,3 +49,13 @@ The governance score is low because human raters disagree among themselves
     not done here.
   - Smart contract risk is not assessed — that requires either an LLM
     audit pass or static analysis integration.
+
+
+
+## 5. 2026 update
+
+We added a Morpho Blue tool in late 2025 and re-ran the eval set with
+Sonnet 4.6. The liquidation distance F1 improved to 0.95; the gain seems
+attributable mostly to the more aggressive tool-use behavior of the newer
+model rather than the additional tool itself (most positions in the eval
+set are Aave V3, not Morpho).
